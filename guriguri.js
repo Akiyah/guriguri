@@ -1,4 +1,4 @@
-// version 2009/07/23
+// version 2009/08/07
 
 var guriguri = {
  initialize: function() {
@@ -11,6 +11,11 @@ var guriguri = {
     guriguri.changeDivTag(tag, params.src, params.height)
    } catch(e) {}
   }
+  setInterval(guriguri.interval)
+ },
+
+ interval: function() {
+  alert(1)
  },
 
  getGuriguriTags: function() {
