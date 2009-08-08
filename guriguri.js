@@ -1,8 +1,6 @@
 // version 2009/08/07
 
 var guriguri = {
- tags: 123,
-
  initialize: function() {
   guriguri.tags = guriguri.getGuriguriTags()
   for (var i = 0; i < guriguri.tags.length; i++) {
@@ -71,9 +69,14 @@ var guriguri = {
 
   var imgtag = new Image()
   imgtag.src = src
+  var imgtag2 = new Image()
+  imgtag2.src = src
   imgtag.onload = guriguri.onload_image
 
+  divtag.guriguri_imgtag = imgtag
+
   divtag.appendChild(imgtag)
+  divtag.appendChild(imgtag2)
  },
 
  onload_image: function() {
@@ -89,7 +92,7 @@ var guriguri = {
 
   divtag.guriguri_width = width
   divtag.guriguri_count = count
-  divtag.guriguri_imgtag = imgtag
+  //divtag.guriguri_imgtag = imgtag
 
   divtag.style.width = width + 'px'
   divtag.style.height = divtag.guriguri_height + 'px'
