@@ -4,11 +4,11 @@ var guriguri = {
  initialize: function() {
   guriguri.tags = guriguri.getGuriguriTags()
   for (var i = 0; i < guriguri.tags.length; i++) {
-   var tag = guriguri.tags[i]
+   var divtag = guriguri.tags[i]
 
    try{
-    var params = JSON.parse(tag.innerHTML)
-    guriguri.changeDivTag(tag, params.src, params.height)
+    var params = JSON.parse(divtag.innerHTML)
+    guriguri.changeDivTag(divtag, params.src, params.height)
    } catch(e) {}
   }
   setInterval(guriguri.interval, 1000)
@@ -16,16 +16,15 @@ var guriguri = {
 
  interval: function() {
   for (var i = 0; i < guriguri.tags.length; i++) {
-   var tag = guriguri.tags[i]
-   if (tag.guriguri_automove) {
+   var divtag = guriguri.tags[i]
+   if (divtag.guriguri_automove) {
 
-    var imgtag = tag.guriguri_imgtag
-    var height = tag.guriguri_height
-    var count = tag.guriguri_count
+    var imgtag = divtag.guriguri_imgtag
+    var height = divtag.guriguri_height
+    var count  = divtag.guriguri_count
 
-
-    var position = tag.guriguri_position 
-    var direction = tag.guriguri_direction
+    var position  = divtag.guriguri_position 
+    var direction = divtag.guriguri_direction
 
     position += direction
     if (position >= count) {
@@ -37,10 +36,11 @@ var guriguri = {
      direction = 1
     }
 
-    imgtag.style.marginTop = -(position * height) + "px"
+    //imgtag.style.marginTop = -(position * height) + "px"
+    guriguri.show(divtag, position, 0.5)
 
-    tag.guriguri_position = position
-    tag.guriguri_direction = direction
+    divtag.guriguri_position  = position
+    divtag.guriguri_direction = direction
    }
   }
  },
@@ -49,9 +49,9 @@ var guriguri = {
   var tags = document.getElementsByTagName('div')
   var guriguri_tags = []
   for (var i = 0; i < tags.length; i++) {
-   var tag = tags[i]
-   if (tag.className == 'guriguri') {
-    guriguri_tags.push(tag)
+   var divtag = tags[i]
+   if (divtag.className == 'guriguri') {
+    guriguri_tags.push(divtag)
    }
   }
   return guriguri_tags
@@ -69,14 +69,18 @@ var guriguri = {
 
   var imgtag = new Image()
   imgtag.src = src
+  divtag.guriguri_imgtag = imgtag
+  divtag.appendChild(imgtag)
+
   var imgtag2 = new Image()
   imgtag2.src = src
-  imgtag.onload = guriguri.onload_image
-
-  divtag.guriguri_imgtag = imgtag
-
-  divtag.appendChild(imgtag)
+  imgtag2.style.position = 'relative'
+  imgtag2.style.opacity = 0.5
+  imgtag2.style.left = "0px"
+  divtag.guriguri_imgtag2 = imgtag2
   divtag.appendChild(imgtag2)
+
+  imgtag.onload = guriguri.onload_image
  },
 
  onload_image: function() {
@@ -97,16 +101,19 @@ var guriguri = {
   divtag.style.width = width + 'px'
   divtag.style.height = divtag.guriguri_height + 'px'
 
+  divtag.guriguri_imgtag2.style.top = - divtag.guriguri_height * (count + 1) + "px"
+
   divtag.onmousemove = function(e) { guriguri.mousemove(e, this) }
   divtag.onmouseover = function(e) { this.guriguri_automove = false }
   divtag.onmouseout  = function(e) { this.guriguri_automove = true }
  },
 
- mousemove: function(e, obj) {
-  var width = obj.guriguri_width
-  var height = obj.guriguri_height
-  var count = obj.guriguri_count
-  var imgtag = obj.guriguri_imgtag
+ mousemove: function(e, divtag) {
+  var width   = divtag.guriguri_width
+  //var height  = divtag.guriguri_height
+  var count   = divtag.guriguri_count
+  var imgtag  = divtag.guriguri_imgtag
+  var imgtag2 = divtag.guriguri_imgtag2
 
   var x
   if (e) {
@@ -119,9 +126,16 @@ var guriguri = {
   if (x < 0) { x = 0 }
 
   var position = Math.floor(x * count / width)
-  imgtag.style.marginTop = -(position * height) + "px"
+//  imgtag.style.marginTop = -(position * height) + "px"
+  guriguri.show(divtag, position, 0.5)
 
-  obj.guriguri_automove = false; 
-  obj.guriguri_position = position; 
+  divtag.guriguri_automove = false; 
+  divtag.guriguri_position = position;
+ },
+
+ show: function(divtag, position, next_opacity) {
+  var height = divtag.guriguri_height
+  divtag.guriguri_imgtag.style.marginTop = -(position * height) + "px"
+  divtag.guriguri_imgtag2.style.opacity = next_opacity
  }
 }
