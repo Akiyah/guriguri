@@ -27,8 +27,8 @@ var guriguri = {
     var direction = divtag.guriguri_direction
 
     position += direction
-    if (position >= count) {
-     position = count - 1
+    if (position >= count * 2 - 1) {
+     position = count * 2 - 2
      direction = -1
     }
     if (position < 0) {
@@ -36,8 +36,12 @@ var guriguri = {
      direction = 1
     }
 
-    //imgtag.style.marginTop = -(position * height) + "px"
-    guriguri.show(divtag, position, 0.5)
+    var page = Math.floor(position / 2)
+    var opacity = 0
+    if (position % 2 == 1) {
+     opacity = 0.5
+    }
+    guriguri.show(divtag, page, opacity)
 
     divtag.guriguri_position  = position
     divtag.guriguri_direction = direction
@@ -96,7 +100,6 @@ var guriguri = {
 
   divtag.guriguri_width = width
   divtag.guriguri_count = count
-  //divtag.guriguri_imgtag = imgtag
 
   divtag.style.width = width + 'px'
   divtag.style.height = divtag.guriguri_height + 'px'
@@ -130,11 +133,11 @@ var guriguri = {
   if (fp % 2 == 1) {
    opacity = p - fp
   }
-  var page = Math.floor(fp / 2) //position
+  var page = Math.floor(fp / 2)
   guriguri.show(divtag, page, opacity)
 
   divtag.guriguri_automove = false; 
-  divtag.guriguri_position = position;
+  divtag.guriguri_position = fp;
  },
 
  show: function(divtag, page, next_opacity) {
