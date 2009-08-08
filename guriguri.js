@@ -19,31 +19,37 @@ var guriguri = {
    var divtag = guriguri.tags[i]
    if (divtag.guriguri_automove) {
 
-    var imgtag = divtag.guriguri_imgtag
-    var height = divtag.guriguri_height
+    //var imgtag = divtag.guriguri_imgtag
+
+    var height = divtag.guriguri_height 
     var count  = divtag.guriguri_count
 
-    var position  = divtag.guriguri_position 
+    var page      = divtag.guriguri_page
+    var opacity   = divtag.guriguri_opacity
     var direction = divtag.guriguri_direction
 
-    position += direction
-    if (position >= count * 2 - 1) {
-     position = count * 2 - 2
+    opacity += direction / 4
+    if (opacity >= 1) {
+     opacity -= 1
+     page += 1
+    }
+    if (opacity < 0) {
+     opacity += 1
+     page -= 1
+    }
+    if (page >= count) {
+     page = count - 1
      direction = -1
     }
-    if (position < 0) {
-     position = 0
+    if (page < 0) {
+     page = 0
      direction = 1
     }
 
-    var page = Math.floor(position / 2)
-    var opacity = 0
-    if (position % 2 == 1) {
-     opacity = 0.5
-    }
     guriguri.show(divtag, page, opacity)
 
-    divtag.guriguri_position  = position
+    divtag.guriguri_page      = page
+    divtag.guriguri_opacity   = opacity
     divtag.guriguri_direction = direction
    }
   }
@@ -68,7 +74,8 @@ var guriguri = {
   divtag.style.height = '0px'
 
   divtag.guriguri_automove = true
-  divtag.guriguri_position = 0
+  divtag.guriguri_page = 0
+  divtag.guriguri_opacity = 0
   divtag.guriguri_direction = 1
 
   var imgtag = new Image()
@@ -79,8 +86,8 @@ var guriguri = {
   var imgtag2 = new Image()
   imgtag2.src = src
   imgtag2.style.position = 'relative'
-  imgtag2.style.opacity = 0.5
-  imgtag2.style.left = "0px"
+  imgtag2.style.opacity = 0
+  //imgtag2.style.left = "0px"
   divtag.guriguri_imgtag2 = imgtag2
   divtag.appendChild(imgtag2)
 
@@ -137,7 +144,8 @@ var guriguri = {
   guriguri.show(divtag, page, opacity)
 
   divtag.guriguri_automove = false; 
-  divtag.guriguri_position = fp;
+  divtag.guriguri_page = page;
+  divtag.guriguri_opacity = 0;
  },
 
  show: function(divtag, page, next_opacity) {
