@@ -110,7 +110,6 @@ var guriguri = {
 
  mousemove: function(e, divtag) {
   var width   = divtag.guriguri_width
-  //var height  = divtag.guriguri_height
   var count   = divtag.guriguri_count
   var imgtag  = divtag.guriguri_imgtag
   var imgtag2 = divtag.guriguri_imgtag2
@@ -125,17 +124,22 @@ var guriguri = {
   if (x >= width) { x = width - 1 }
   if (x < 0) { x = 0 }
 
-  var position = Math.floor(x * count / width)
-//  imgtag.style.marginTop = -(position * height) + "px"
-  guriguri.show(divtag, position, 0.5)
+  var p = x * (count * 2 - 1) / width
+  var fp = Math.floor(p)
+  var opacity = 0
+  if (fp % 2 == 1) {
+   opacity = p - fp
+  }
+  var page = Math.floor(fp / 2) //position
+  guriguri.show(divtag, page, opacity)
 
   divtag.guriguri_automove = false; 
   divtag.guriguri_position = position;
  },
 
- show: function(divtag, position, next_opacity) {
+ show: function(divtag, page, next_opacity) {
   var height = divtag.guriguri_height
-  divtag.guriguri_imgtag.style.marginTop = -(position * height) + "px"
+  divtag.guriguri_imgtag.style.marginTop = -(page * height) + "px"
   divtag.guriguri_imgtag2.style.opacity = next_opacity
  }
 }
