@@ -28,7 +28,7 @@ var guriguri = {
     var opacity   = divtag.guriguri_opacity
     var direction = divtag.guriguri_direction
 
-    opacity += direction / 4
+    opacity += direction * ((Math.random() + 1) / 8)
     if (opacity >= 1) {
      opacity -= 1
      page += 1
