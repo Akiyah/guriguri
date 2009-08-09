@@ -148,9 +148,14 @@ var guriguri = {
   divtag.guriguri_opacity = 0;
  },
 
- show: function(divtag, page, next_opacity) {
+ show: function(divtag, page, opacity) {
   var height = divtag.guriguri_height
   divtag.guriguri_imgtag.style.marginTop = -(page * height) + "px"
-  divtag.guriguri_imgtag2.style.opacity = next_opacity
+  divtag.guriguri_imgtag2.style.opacity = opacity
+  divtag.guriguri_imgtag2.style.filter = "alpha(opacity=" + Math.floor(opacity * 100) + ")"
+  divtag.guriguri_imgtag2.style.MozOpacity = opacity
+
+
+
  }
 }
