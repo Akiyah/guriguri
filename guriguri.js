@@ -1,4 +1,4 @@
-// version 2009/08/07
+// version 2009/08/14
 
 var guriguri = {
  initialize: function() {
@@ -19,38 +19,21 @@ var guriguri = {
    var divtag = guriguri.tags[i]
    if (divtag.guriguri_automove) {
 
-    //var imgtag = divtag.guriguri_imgtag
-
-    var height = divtag.guriguri_height 
+    var width  = divtag.guriguri_width
+    var height = divtag.guriguri_height
     var count  = divtag.guriguri_count
+    var x      = divtag.guriguri_x
 
-    var page      = divtag.guriguri_page
-    var opacity   = divtag.guriguri_opacity
     var direction = divtag.guriguri_direction
 
-    opacity += direction * ((Math.random() + 1) / 8)
-    if (opacity >= 1) {
-     opacity -= 1
-     page += 1
-    }
-    if (opacity < 0) {
-     opacity += 1
-     page -= 1
-    }
-    if (page >= count) {
-     page = count - 1
-     direction = -1
-    }
-    if (page < 0) {
-     page = 0
-     direction = 1
-    }
+    x += direction * (width / (count * 2 - 1)) * Math.random()
+    if (x >= width) { x = width - 1; direction = -1 }
+    if (x < 0)      { x = 0;         direction = 1 }
 
-    guriguri.show(divtag, page, opacity)
-
-    divtag.guriguri_page      = page
-    divtag.guriguri_opacity   = opacity
     divtag.guriguri_direction = direction
+    divtag.guriguri_x = x
+    guriguri.show(divtag)
+
    }
   }
  },
@@ -74,9 +57,8 @@ var guriguri = {
   divtag.style.height = '0px'
 
   divtag.guriguri_automove = true
-  divtag.guriguri_page = 0
-  divtag.guriguri_opacity = 0
   divtag.guriguri_direction = 1
+  divtag.guriguri_x = 0
 
   var imgtag = new Image()
   imgtag.src = src
@@ -130,10 +112,38 @@ var guriguri = {
   } else {
    x = event.offsetX
   }
-
   if (x >= width) { x = width - 1 }
   if (x < 0) { x = 0 }
 
+  divtag.guriguri_automove = false
+  divtag.guriguri_x = x
+  guriguri.show(divtag)
+
+ },
+
+ show: function(divtag) {
+  var x       = divtag.guriguri_x
+  var width   = divtag.guriguri_width
+  var count   = divtag.guriguri_count
+
+  var page_opacity = guriguri.getPageOpacity(x, width, count)
+
+  var page = page_opacity[0]
+  var opacity = page_opacity[1]
+
+  var height = divtag.guriguri_height
+  var p = (page * height)
+  var imgtag = divtag.guriguri_imgtag
+  if (p) {
+   imgtag.style.marginTop = -p + "px"
+  }
+  var imgtag2 = divtag.guriguri_imgtag2
+  imgtag2.style.opacity = opacity
+  imgtag2.style.filter = "alpha(opacity=" + Math.floor(opacity * 100) + ")"
+  imgtag2.style.MozOpacity = opacity
+ },
+
+ getPageOpacity: function(x, width, count) {
   var p = x * (count * 2 - 1) / width
   var fp = Math.floor(p)
   var opacity = 0
@@ -141,21 +151,8 @@ var guriguri = {
    opacity = p - fp
   }
   var page = Math.floor(fp / 2)
-  guriguri.show(divtag, page, opacity)
-
-  divtag.guriguri_automove = false; 
-  divtag.guriguri_page = page;
-  divtag.guriguri_opacity = 0;
- },
-
- show: function(divtag, page, opacity) {
-  var height = divtag.guriguri_height
-  divtag.guriguri_imgtag.style.marginTop = -(page * height) + "px"
-  divtag.guriguri_imgtag2.style.opacity = opacity
-  divtag.guriguri_imgtag2.style.filter = "alpha(opacity=" + Math.floor(opacity * 100) + ")"
-  divtag.guriguri_imgtag2.style.MozOpacity = opacity
-
-
-
+  
+  return [page, opacity]
  }
+
 }
