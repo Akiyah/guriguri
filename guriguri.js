@@ -1,4 +1,4 @@
-// version 2009/08/14
+// version 2009/08/14 13:00
 
 var guriguri = {
  initialize: function() {
@@ -132,11 +132,13 @@ var guriguri = {
   var opacity = page_opacity[1]
 
   var height = divtag.guriguri_height
-  var p = (page * height)
+  var p = page * height
   var imgtag = divtag.guriguri_imgtag
-  if (p) {
+  if (p || p == 0) {
    imgtag.style.marginTop = -p + "px"
   }
+
+  //console.log("x:" + x + ", page:" + page + ", p:" + p + ", opacity:" + opacity + "***:" + imgtag.style.marginTop)
   var imgtag2 = divtag.guriguri_imgtag2
   imgtag2.style.opacity = opacity
   imgtag2.style.filter = "alpha(opacity=" + Math.floor(opacity * 100) + ")"
