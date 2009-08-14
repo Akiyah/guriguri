@@ -1,4 +1,4 @@
-// version 2009/08/14 13:00
+// version 2009/08/15
 
 var guriguri = {
  initialize: function() {
@@ -96,8 +96,18 @@ var guriguri = {
   divtag.guriguri_imgtag2.style.top = - divtag.guriguri_height * (count + 1) + "px"
 
   divtag.onmousemove = function(e) { guriguri.mousemove(e, this) }
-  divtag.onmouseover = function(e) { this.guriguri_automove = false }
-  divtag.onmouseout  = function(e) { this.guriguri_automove = true }
+  divtag.onmouseout  = function(e) {
+   this.guriguri_automove = true
+   divtag.guriguri_imgtag2.style.display = ""
+  }
+  divtag.onmouseover = function(e) {
+   this.guriguri_automove = false
+   //divtag.guriguri_imgtag2.style.filter = "alpha(opacity=0)"
+   var isMSIE = /*@cc_on!@*/0;
+   if (isMSIE) {
+    divtag.guriguri_imgtag2.style.display = "none"
+   }
+  }
  },
 
  mousemove: function(e, divtag) {
@@ -141,7 +151,9 @@ var guriguri = {
   //console.log("x:" + x + ", page:" + page + ", p:" + p + ", opacity:" + opacity + "***:" + imgtag.style.marginTop)
   var imgtag2 = divtag.guriguri_imgtag2
   imgtag2.style.opacity = opacity
-  imgtag2.style.filter = "alpha(opacity=" + Math.floor(opacity * 100) + ")"
+  if (divtag.guriguri_automove) {
+   imgtag2.style.filter = "alpha(opacity=" + Math.floor(opacity * 100) + ")"
+  }
   imgtag2.style.MozOpacity = opacity
  },
 
