@@ -1,4 +1,4 @@
-// version 2009/08/15
+// version 2009/08/16
 
 var guriguri = {
  initialize: function() {
@@ -8,7 +8,7 @@ var guriguri = {
 
    try{
     var params = JSON.parse(divtag.innerHTML)
-    guriguri.changeDivTag(divtag, params.src, params.height)
+    guriguri.changeDivTag(divtag, params.src, params.height, params.start)
    } catch(e) {}
   }
   setInterval(guriguri.interval, 1000)
@@ -50,8 +50,9 @@ var guriguri = {
   return guriguri_tags
  },
 
- changeDivTag: function(divtag, src, height) {
+ changeDivTag: function(divtag, src, height, start) {
   divtag.guriguri_height = height
+  divtag.guriguri_start = start
   divtag.style.overflow = 'hidden'
   divtag.innerHTML = ''
   divtag.style.height = '0px'
@@ -92,6 +93,13 @@ var guriguri = {
 
   divtag.style.width = width + 'px'
   divtag.style.height = divtag.guriguri_height + 'px'
+
+  if (!divtag.guriguri_start) {
+   divtag.guriguri_start = 0
+  }
+  var p = divtag.guriguri_start * divtag.guriguri_height
+  divtag.guriguri_imgtag.style.marginTop = -p + "px"
+  divtag.guriguri_x = p * width / (count * 2 - 1)
 
   divtag.guriguri_imgtag2.style.top = - divtag.guriguri_height * (count + 1) + "px"
 
