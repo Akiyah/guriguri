@@ -99,7 +99,7 @@ var guriguri = {
   }
   var p = divtag.guriguri_start * divtag.guriguri_height
   divtag.guriguri_imgtag.style.marginTop = -p + "px"
-  divtag.guriguri_x = p * width / (count * 2 - 1)
+  divtag.guriguri_x = divtag.guriguri_start * 2 * width / (count * 2 - 1)
 
   divtag.guriguri_imgtag2.style.top = - divtag.guriguri_height * (count + 1) + "px"
 
