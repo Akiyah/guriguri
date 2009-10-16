@@ -1,4 +1,4 @@
-// version 2009/10/16
+// version 2009/10/17
 
 var guriguri = {
  initialize: function() {
@@ -9,7 +9,7 @@ var guriguri = {
    var divtag = guriguri.tags[i]
 
    try{
-    text = divtag.innerHTML
+    var text = divtag.innerHTML
     text = guriguri.normalJSON(text)
     var params = JSON.parse(text)
     guriguri.changeDivTag(divtag, params.src, params.height, params.start)
@@ -19,11 +19,13 @@ var guriguri = {
  },
 
  normalJSON: function(text) {
-  return text.replace(/([^:, \{\}]+)/g, function(whole, $1) {return guriguri.re_double_quote($1)})
- },
-
- re_double_quote: function(text) {
-  return '"' + text.replace(/^"|"$/g, "") + '"'
+  function re_double_quote(text) {
+   return '"' + text.replace(/^"|"$/g, "") + '"'
+  }
+  function noamal_key_value(whole, $1, $2) {
+   return re_double_quote($1) + ':' + re_double_quote($2)
+  }
+  return text.replace(/([^:, \{\}]+):([^, \{\}]+)/g, noamal_key_value)
  },
 
  interval: function() {
