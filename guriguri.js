@@ -1,17 +1,29 @@
-// version 2009/08/16
+// version 2009/10/16
 
 var guriguri = {
  initialize: function() {
+  guriguri.isMSIE = /*@cc_on!@*/0
+
   guriguri.tags = guriguri.getGuriguriTags()
   for (var i = 0; i < guriguri.tags.length; i++) {
    var divtag = guriguri.tags[i]
 
    try{
-    var params = JSON.parse(divtag.innerHTML)
+    text = divtag.innerHTML
+    text = guriguri.normalJSON(text)
+    var params = JSON.parse(text)
     guriguri.changeDivTag(divtag, params.src, params.height, params.start)
    } catch(e) {}
   }
   setInterval(guriguri.interval, 1000)
+ },
+
+ normalJSON: function(text) {
+  return text.replace(/([^:, \{\}]+)/g, function(whole, $1) {return guriguri.re_double_quote($1)})
+ },
+
+ re_double_quote: function(text) {
+  return '"' + text.replace(/^"|"$/g, "") + '"'
  },
 
  interval: function() {
@@ -66,13 +78,15 @@ var guriguri = {
   divtag.guriguri_imgtag = imgtag
   divtag.appendChild(imgtag)
 
-  var imgtag2 = new Image()
-  imgtag2.src = src
-  imgtag2.style.position = 'relative'
-  imgtag2.style.opacity = 0
-  //imgtag2.style.left = "0px"
-  divtag.guriguri_imgtag2 = imgtag2
-  divtag.appendChild(imgtag2)
+  if (!guriguri.isMSIE) {
+   var imgtag2 = new Image()
+   imgtag2.src = src
+   imgtag2.style.position = 'relative'
+   imgtag2.style.opacity = 0
+   //imgtag2.style.left = "0px"
+   divtag.guriguri_imgtag2 = imgtag2
+   divtag.appendChild(imgtag2)
+  }
 
   imgtag.onload = guriguri.onload_image
  },
@@ -101,22 +115,25 @@ var guriguri = {
   //divtag.guriguri_imgtag.style.marginTop = -p + "px"
   divtag.guriguri_x = (divtag.guriguri_start * 2 + 1) * width / (count * 2 - 1)
 
-  divtag.guriguri_imgtag2.style.top = - divtag.guriguri_height * (count + 1) + "px"
+  if (!guriguri.isMSIE) {
+   divtag.guriguri_imgtag2.style.top = - divtag.guriguri_height * (count + 1) + "px"
+  }
 
   guriguri.show(divtag)
 
   divtag.onmousemove = function(e) { guriguri.mousemove(e, this) }
   divtag.onmouseout  = function(e) {
    this.guriguri_automove = true
-   divtag.guriguri_imgtag2.style.display = ""
+   if (!guriguri.isMSIE) {
+    divtag.guriguri_imgtag2.style.display = ""
+   }
   }
   divtag.onmouseover = function(e) {
    this.guriguri_automove = false
    //divtag.guriguri_imgtag2.style.filter = "alpha(opacity=0)"
-   var isMSIE = /*@cc_on!@*/0;
-   if (isMSIE) {
-    divtag.guriguri_imgtag2.style.display = "none"
-   }
+//   if (guriguri.isMSIE) {
+//    divtag.guriguri_imgtag2.style.display = "none"
+//   }
   }
  },
 
@@ -159,12 +176,14 @@ var guriguri = {
   }
 
   //console.log("x:" + x + ", page:" + page + ", p:" + p + ", opacity:" + opacity + "***:" + imgtag.style.marginTop)
-  var imgtag2 = divtag.guriguri_imgtag2
-  imgtag2.style.opacity = opacity
-  if (divtag.guriguri_automove) {
-   imgtag2.style.filter = "alpha(opacity=" + Math.floor(opacity * 100) + ")"
+  if (!guriguri.isMSIE) {
+   var imgtag2 = divtag.guriguri_imgtag2
+   imgtag2.style.opacity = opacity
+   //if (divtag.guriguri_automove) {
+   // imgtag2.style.filter = "alpha(opacity=" + Math.floor(opacity * 100) + ")"
+   //}
+   imgtag2.style.MozOpacity = opacity
   }
-  imgtag2.style.MozOpacity = opacity
  },
 
  getPageOpacity: function(x, width, count) {
