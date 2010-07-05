@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<script type="text/javascript" src="jquery-1.4.2.js"></script>
+<script>
+
+$(function() {
+  $("#area").mousemove(mousemove);
+});
+
+
+function mousemove(e) {
+  var pos = $(e.currentTarget).position();
+  var x = e.pageX - pos.left;
+  
+  console.log(x)
+  var page = Math.floor(x * 12 / 640);
+  
+  if (page >= 12) { page = 12 - 1 };
+  if (page < 0) { page = 0 };
+    
+  var imgtag = $(e.currentTarget).children()[0];
+  imgtag.style.marginLeft = 0 + "px";
+  imgtag.style.marginTop = -page * 480 + "px";
+}
+</script>
+<body>
+
+<div style="width:640px; height:480px; overflow: hidden;" id="area">
+<div>
+<img src="../../../mixi/guriguri/images/sample/01.jpg" />
+<img src="../../../mixi/guriguri/images/sample/02.jpg" />
+<img src="../../../mixi/guriguri/images/sample/03.jpg" />
+<img src="../../../mixi/guriguri/images/sample/04.jpg" />
+<img src="../../../mixi/guriguri/images/sample/05.jpg" />
+<img src="../../../mixi/guriguri/images/sample/06.jpg" />
+<img src="../../../mixi/guriguri/images/sample/07.jpg" />
+<img src="../../../mixi/guriguri/images/sample/08.jpg" />
+<img src="../../../mixi/guriguri/images/sample/09.jpg" />
+<img src="../../../mixi/guriguri/images/sample/10.jpg" />
+<img src="../../../mixi/guriguri/images/sample/11.jpg" />
+<img src="../../../mixi/guriguri/images/sample/12.jpg" />
+</div>
+</div>
+
+
+
+
+<img src="http://art7.photozou.jp/pub/876/237876/photo/20924571.jpg" style="border:0" />
+<img src="http://art7.photozou.jp/pub/876/237876/photo/20924571.jpg" width="21" height="450" style="border:0" />
+<img src="http://art7.photozou.jp/pub/876/237876/photo/20924571.jpg" width="11" height="240" style="border:0" />
+
+
+
+<br/>
+
+http://art7.photozou.jp/bin/photo/20924571/org.bin?size=120
+http://art7.photozou.jp/bin/photo/20924571/org.bin?size=240
+http://art7.photozou.jp/pub/876/237876/photo/20924571.v1273655531.jpg?size=450
+http://art7.photozou.jp/bin/photo/20924571/org.bin?size=800
+http://art7.photozou.jp/bin/photo/20924571/org.bin?size=1024
+http://art7.photozou.jp/pub/876/237876/photo/20924571_org.v1273655531.jpg
+
+</body>
+</html>
